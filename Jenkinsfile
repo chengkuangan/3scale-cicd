@@ -37,6 +37,8 @@ pipeline{
       string (defaultValue: 'Developer', name:'DEVELOPER_ACCOUNT_ID', description:'Developer Account Id')
       string (defaultValue: 'https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/plan.yaml', name:'PLAN_YAML_FILE_PATH', description:'Developer Account Id')
       string (defaultValue: 'openapi-spec-2.0.json', name:'OPENAPI_FILE', description:'Developer Account Id')
+      string (defaultValue: 'Always', name:'IMAGE_PULL_POLICY', description:'Developer Account Id')
+      
   }
   
   stages{
@@ -71,6 +73,7 @@ pipeline{
                             image           : params.TOOLBOX_IMAGE_REGISTRY,
                             insecure        : params.DISABLE_TLS_VALIDATION == "yes",
                             secretName      : params.SECRET_NAME,
+                            imagePullPolicy : params.IMAGE_PULL_POLICY,
                             verbose         : true],
                   service: [:],
                   applicationPlans: [
