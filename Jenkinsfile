@@ -57,7 +57,7 @@ pipeline{
                   openapi: [filename: "openapi-spec.json"],
                   environment: [baseSystemName                : params.API_BASE_SYSTEM_NAME,
                                 privateBaseUrl                : backend_service,
-                                privateBasePath               : "/cicd",
+                                privateBasePath               : "/hello",
                                 environmentName               :  envName,
                                 publicStagingWildcardDomain: params.PUBLIC_STAGING_WILDCARD_DOMAIN != "" ? params.PUBLIC_STAGING_WILDCARD_DOMAIN : null,
                                 publicProductionWildcardDomain: params.PUBLIC_PRODUCTION_WILDCARD_DOMAIN != "" ? params.PUBLIC_PRODUCTION_WILDCARD_DOMAIN : null

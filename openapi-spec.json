@@ -49,5 +49,16 @@
           "scheme" : "basic"
         }
       }
-    }
+    },
+    "securityDefinitions" : {
+      "apikey" : {
+        "type" : "apiKey",
+        "description" : "Use a 3scale API Key",
+        "name" : "api-key",
+        "in" : "query"
+      }
+    },
+    "security" : [ {
+      "apikey" : [ ]
+    } ],
   }
