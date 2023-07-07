@@ -25,7 +25,6 @@ pipeline{
       string (defaultValue: 'backend-api', name:'DEV_PROJECT', description:'API Base System Name')
       string (defaultValue: 'threescale-toolbox', name:'TOOLBOX_PROJECT', description:'API Base System Name')
       string (defaultValue: 'hello_service', name:'API_BASE_SYSTEM_NAME', description:'API Base System Name')
-      string (defaultValue: 'image-registry.openshift-image-registry.svc:5000', name:'IMAGE_REGISTRY', description:'open shift token')
       string (defaultValue: 'https://github.com/rh-integration/IntegrationApp-Automation.git', name:'GIT_REPO', description:'Git source')
       string (defaultValue: 'main', name:'GIT_BRANCH', description:'Git branch in the source git')
       string (defaultValue: '3scale-tenant', name:'TARGET_INSTANCE', description:'Target instance for toolbox')
