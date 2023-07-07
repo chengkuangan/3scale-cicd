@@ -23,6 +23,7 @@ pipeline{
       string (defaultValue: 'user1-apicast-production.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com', name:'PUBLIC_PRODUCTION_WILDCARD_DOMAIN', description:'3Scale production public domain')
       string (defaultValue: 'user1-apicast-staging.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com', name:'PUBLIC_STAGING_WILDCARD_DOMAIN', description:'3Scale staging public domain')
       string (defaultValue: 'backend-api', name:'DEV_PROJECT', description:'API Base System Name')
+      string (defaultValue: 'threescale-toolbox', name:'TOOLBOX_PROJECT', description:'API Base System Name')
       string (defaultValue: 'hello_service', name:'API_BASE_SYSTEM_NAME', description:'API Base System Name')
       string (defaultValue: 'image-registry.openshift-image-registry.svc:5000', name:'IMAGE_REGISTRY', description:'open shift token')
       string (defaultValue: 'https://github.com/rh-integration/IntegrationApp-Automation.git', name:'GIT_REPO', description:'Git source')
@@ -62,7 +63,7 @@ pipeline{
                                 publicStagingWildcardDomain: params.PUBLIC_STAGING_WILDCARD_DOMAIN != "" ? params.PUBLIC_STAGING_WILDCARD_DOMAIN : null,
                                 publicProductionWildcardDomain: params.PUBLIC_PRODUCTION_WILDCARD_DOMAIN != "" ? params.PUBLIC_PRODUCTION_WILDCARD_DOMAIN : null
                               ],
-                  toolbox: [openshiftProject: params.DEV_PROJECT, destination: params.TARGET_INSTANCE,
+                  toolbox: [openshiftProject: params.TOOLBOX_PROJECT, destination: params.TARGET_INSTANCE,
                             image           : params.TOOLBOX_IMAGE_REGISTRY,
                             insecure        : params.DISABLE_TLS_VALIDATION == "yes",
                             secretName      : params.SECRET_NAME],
