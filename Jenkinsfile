@@ -35,6 +35,7 @@ pipeline{
       string (defaultValue: 'https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/plan.yaml', name:'PLAN_YAML_FILE_PATH', description:'Application Plan YAML file')
       string (defaultValue: 'openapi-spec.json', name:'OPENAPI_FILE', description:'Open API file')
       string (defaultValue: 'IfNotPresent', name:'IMAGE_PULL_POLICY', description:'3Scale Toolbox Image Pull Strategy')
+      string (defaultValue: 'http://hello-service.backend-api.svc.cluster.local:8080', name:'BACKEND_API_PRIVATE_URL', description:'3Scale Toolbox Image Pull Strategy')
       
   }
   
@@ -50,9 +51,6 @@ pipeline{
       steps{
         script {
           def app_name= 'hello-service'
-          def backend_service = app_name + '.backend-api.svc.cluster.local'
-          def targetPort = '8080'
-          backend_service=  "http://" + backend_service + targetPort
           
           echo "Prepare 3Scale Configuration"
 
@@ -61,7 +59,7 @@ pipeline{
 
           service = toolbox.prepareThreescaleService(
                   openapi: [filename: params.OPENAPI_FILE],
-                  environment: [privateBaseUrl                : backend_service,
+                  environment: [privateBaseUrl                : params.BACKEND_API_PRIVATE_URL,
                                 targetSystemName              : "hello_service",
                                 stagingPublicBaseURL          : params.STAGING_PUBLIC_BASE_URL,
                                 productionPublicBaseURL       : params.PRODUCTION_PUBLIC_BASE_URL
