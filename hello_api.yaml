@@ -1,0 +1,105 @@
+---
+apiVersion: v1
+kind: List
+items:
+- apiVersion: capabilities.3scale.net/v1beta1
+  kind: Product
+  metadata:
+    annotations:
+      3scale_toolbox_created_at: '2023-07-07T01:31:53Z'
+      3scale_toolbox_version: 0.20.0
+    name: hello.api.ysgowtnx
+  spec:
+    name: Hello API
+    systemName: hello_api
+    description: Use this sample to demonstrates some 3Scale features
+    mappingRules:
+    - httpMethod: GET
+      pattern: "/hello/*"
+      metricMethodRef: hello
+      increment: 1
+      last: false
+    metrics:
+      hits:
+        friendlyName: Hits
+        unit: hit
+        description: Number of API hits
+    methods:
+      hello:
+        friendlyName: Hello
+        description: ''
+    policies:
+    - name: routing
+      version: builtin
+      configuration:
+        rules:
+        - condition:
+            combine_op: and
+            operations:
+            - value_type: plain
+              match: header
+              value: Hello*
+              op: matches
+              header_name: MY-HEADER
+          url: http://hello-service.backend-api.svc.cluster.local:8080
+          replace_path: "/hello/get"
+      enabled: true
+    - name: apicast
+      version: builtin
+      configuration: {}
+      enabled: true
+    applicationPlans:
+      hello_simple_plan:
+        name: Hello Application Plan
+        appsRequireApproval: false
+        trialPeriod: 0
+        setupFee: 0.0
+        custom: false
+        state: published
+        costMonth: 0.0
+        pricingRules: []
+        limits: []
+    backendUsages:
+      hello_backend:
+        path: "/"
+    deployment:
+      apicastHosted:
+        authentication:
+          userkey:
+            authUserKey: user_key
+            credentials: query
+            security:
+              hostHeader: 
+              secretToken: Shared_secret_sent_from_proxy_to_API_backend_8a52603d9d4f5c62
+            gatewayResponse:
+              errorStatusAuthFailed: 403
+              errorHeadersAuthFailed: text/plain; charset=us-ascii
+              errorAuthFailed: Authentication failed
+              errorStatusAuthMissing: 403
+              errorHeadersAuthMissing: text/plain; charset=us-ascii
+              errorAuthMissing: Authentication parameters missing
+              errorStatusNoMatch: 404
+              errorHeadersNoMatch: text/plain; charset=us-ascii
+              errorNoMatch: No Mapping Rule matched
+              errorStatusLimitsExceeded: 429
+              errorHeadersLimitsExceeded: text/plain; charset=us-ascii
+              errorLimitsExceeded: Usage limit exceeded
+- apiVersion: capabilities.3scale.net/v1beta1
+  kind: Backend
+  metadata:
+    annotations:
+      3scale_toolbox_created_at: '2023-07-07T01:31:53Z'
+      3scale_toolbox_version: 0.20.0
+    name: hello.backend.qnhvlwjc
+  spec:
+    name: Hello Backend
+    systemName: hello_backend
+    privateBaseURL: http://hello-service.backend-api.svc.cluster.local:8080
+    description: ''
+    mappingRules: []
+    metrics:
+      hits:
+        friendlyName: Hits
+        unit: hit
+        description: Number of API hits
+    methods: {}

@@ -1,0 +1,53 @@
+{
+    "openapi" : "3.0.3",
+    "info" : {
+      "title" : "hello-service API",
+      "version" : "1.0.0-SNAPSHOT"
+    },
+    "paths" : {
+      "/hello/get" : {
+        "get" : {
+          "tags" : [ "Resource" ],
+          "parameters" : [ {
+            "name" : "MY-HEADER",
+            "in" : "header",
+            "schema" : {
+              "type" : "string"
+            }
+          } ],
+          "responses" : {
+            "200" : {
+              "description" : "OK"
+            }
+          }
+        }
+      },
+      "/hello/get/{name}" : {
+        "get" : {
+          "tags" : [ "Resource" ],
+          "parameters" : [ {
+            "name" : "name",
+            "in" : "path",
+            "required" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          } ],
+          "responses" : {
+            "200" : {
+              "description" : "OK"
+            }
+          }
+        }
+      }
+    },
+    "components" : {
+      "securitySchemes" : {
+        "SecurityScheme" : {
+          "type" : "http",
+          "description" : "Authentication",
+          "scheme" : "basic"
+        }
+      }
+    }
+  }
