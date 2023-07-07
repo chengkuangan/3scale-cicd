@@ -37,6 +37,7 @@ pipeline{
       string (defaultValue: 'https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/plan.yaml', name:'PLAN_YAML_FILE_PATH', description:'Developer Account Id')
       
   }
+  
   stages{
     stage('Checkout Source'){
       steps {
@@ -56,7 +57,7 @@ pipeline{
           
           echo "Prepare 3Scale Configuration"
           service = toolbox.prepareThreescaleService(
-                  openapi: [filename: "openapi-spec.json"],
+                  openapi: [filename: "openapi-spec.yaml"],
                   environment: [baseSystemName                : params.API_BASE_SYSTEM_NAME,
                                 privateBaseUrl                : backend_service,
                                 privateBasePath               : "/hello",
@@ -69,7 +70,6 @@ pipeline{
                             image           : params.TOOLBOX_IMAGE_REGISTRY,
                             insecure        : params.DISABLE_TLS_VALIDATION == "yes",
                             secretName      : params.SECRET_NAME,
-                            JOB_BASE_NAME   : app_name,
                             verbose         : true],
                   service: [:],
                   applicationPlans: [
