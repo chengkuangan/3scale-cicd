@@ -29,15 +29,15 @@ pipeline{
       string (defaultValue: 'https://github.com/rh-integration/IntegrationApp-Automation.git', name:'GIT_REPO', description:'Git source')
       string (defaultValue: 'main', name:'GIT_BRANCH', description:'Git branch in the source git')
       string (defaultValue: '3scale-tenant', name:'TARGET_INSTANCE', description:'Target instance for toolbox')
-      //string (defaultValue: 'image-registry.openshift-image-registry.svc:5000/rh-dev/toolbox:v0.12.4', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
-      string (defaultValue: 'quay.io/redhat/3scale-toolbox', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
+      string (defaultValue: 'registry.redhat.io/3scale-amp2/toolbox-rhel8:1.9.0-46', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
+      //string (defaultValue: 'quay.io/redhat/3scale-toolbox', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
       //string (defaultValue: 'quay.io/redhat/3scale-toolbox:v0.14.0', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
       string (defaultValue: 'yes', name:'DISABLE_TLS_VALIDATION', description:'Disable TLS verification')
       string (defaultValue: '3scale-toolbox', name:'SECRET_NAME', description:'Disable TLS verification')
       string (defaultValue: 'Developer', name:'DEVELOPER_ACCOUNT_ID', description:'Developer Account Id')
       string (defaultValue: 'https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/plan.yaml', name:'PLAN_YAML_FILE_PATH', description:'Developer Account Id')
-      string (defaultValue: 'openapi-spec.json', name:'OPENAPI_FILE', description:'Developer Account Id')
-      string (defaultValue: 'Always', name:'IMAGE_PULL_POLICY', description:'Developer Account Id')
+      string (defaultValue: 'openapi-spec.json', name:'OPENAPI_FILE', description:'Open API file')
+      string (defaultValue: 'Always', name:'IMAGE_PULL_POLICY', description:'3Scale Toolbox Image Pull Strategy')
       
   }
   
@@ -59,6 +59,10 @@ pipeline{
           backend_service=  "http://"+backend_service
           
           echo "Prepare 3Scale Configuration"
+
+          echo "OpenAPI File: " + params.OPENAPI_FILE
+          echo "Toolbox Image Registry: " + params.TOOLBOX_IMAGE_REGISTRY
+
           service = toolbox.prepareThreescaleService(
                   openapi: [filename: params.OPENAPI_FILE],
                   environment: [baseSystemName                : params.API_BASE_SYSTEM_NAME,
