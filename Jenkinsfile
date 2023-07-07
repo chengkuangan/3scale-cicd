@@ -32,7 +32,7 @@ pipeline{
       //string (defaultValue: 'quay.io/redhat/3scale-toolbox', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
       //string (defaultValue: 'quay.io/redhat/3scale-toolbox:v0.14.0', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
       string (defaultValue: 'yes', name:'DISABLE_TLS_VALIDATION', description:'Disable TLS verification')
-      string (defaultValue: '3scale-toolbox', name:'SECRET_NAME', description:'Disable TLS verification')
+      string (defaultValue: '3scale-toolbox', name:'SECRET_NAME', description:'3Scale Toolbox OCP Secret')
       string (defaultValue: 'Developer', name:'DEVELOPER_ACCOUNT_ID', description:'Developer Account Id')
       string (defaultValue: 'https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/plan.yaml', name:'PLAN_YAML_FILE_PATH', description:'Application Plan YAML file')
       string (defaultValue: 'openapi-spec.json', name:'OPENAPI_FILE', description:'Open API file')
