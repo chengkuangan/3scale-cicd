@@ -32,6 +32,8 @@ pipeline{
       string (defaultValue: 'yes', name:'DISABLE_TLS_VALIDATION', description:'Disable TLS verification')
       string (defaultValue: '3scale-toolbox', name:'SECRET_NAME', description:'Disable TLS verification')
       string (defaultValue: 'Developer', name:'DEVELOPER_ACCOUNT_ID', description:'Developer Account Id')
+      string (defaultValue: 'https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/plan.yaml', name:'PLAN_YAML_FILE_PATH', description:'Developer Account Id')
+      
   }
   stages{
     stage('Checkout Source'){
