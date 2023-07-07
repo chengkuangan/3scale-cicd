@@ -63,7 +63,8 @@ pipeline{
                                 publicStagingWildcardDomain: params.PUBLIC_STAGING_WILDCARD_DOMAIN != "" ? params.PUBLIC_STAGING_WILDCARD_DOMAIN : null,
                                 publicProductionWildcardDomain: params.PUBLIC_PRODUCTION_WILDCARD_DOMAIN != "" ? params.PUBLIC_PRODUCTION_WILDCARD_DOMAIN : null
                               ],
-                  toolbox: [openshiftProject: params.TOOLBOX_PROJECT, destination: params.TARGET_INSTANCE,
+                  toolbox: [openshiftProject: params.TOOLBOX_PROJECT, 
+                            destination: params.TARGET_INSTANCE,
                             image           : params.TOOLBOX_IMAGE_REGISTRY,
                             insecure        : params.DISABLE_TLS_VALIDATION == "yes",
                             secretName      : params.SECRET_NAME],
@@ -74,7 +75,7 @@ pipeline{
                           [artefactFile: params.PLAN_YAML_FILE_PATH],
                   ],
                   applications: [
-                          [name: envName, description: "This is used for test environment ", plan: "hello_simple_plan", account: params.DEVELOPER_ACCOUNT_ID]
+                          [name: app_name, description: "This is used for test environment ", plan: "hello_simple_plan", account: params.DEVELOPER_ACCOUNT_ID]
 
                   ]
 
