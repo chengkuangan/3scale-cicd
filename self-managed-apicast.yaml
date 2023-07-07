@@ -1,0 +1,28 @@
+apiVersion: apps.3scale.net/v1alpha1
+kind: APIcast
+metadata:
+  name: hello-apicast-staging
+  namespace: threescale-apicast
+spec:
+  adminPortalCredentialsRef:
+    name: 3scaleportal
+  deploymentEnvironment: staging
+  configurationLoadMode: lazy
+  exposedHost:
+    host: "hello-staging-apicast.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com"
+
+
+---
+
+apiVersion: apps.3scale.net/v1alpha1
+kind: APIcast
+metadata:
+  name: hello-apicast-production
+  namespace: threescale-apicast
+spec:
+  adminPortalCredentialsRef:
+    name: 3scaleportal
+  deploymentEnvironment: production
+  configurationLoadMode: lazy
+  exposedHost:
+    host: "hello-production-apicast.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com"

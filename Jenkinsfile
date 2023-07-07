@@ -20,8 +20,8 @@ pipeline{
     }
   }
   parameters{
-      string (defaultValue: 'https://hello-service-user1-apicast-production.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com:443', name:'PRODUCTION_PUBLIC_BASE_URL', description:'3Scale production public domain')
-      string (defaultValue: 'https://hello-service-user1-apicast-staging.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com:443', name:'STAGING_PUBLIC_BASE_URL', description:'3Scale staging public domain')
+      string (defaultValue: 'http://hello-production-apicast.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com:80', name:'PRODUCTION_PUBLIC_BASE_URL', description:'3Scale production public domain')
+      string (defaultValue: 'http://hello-staging-apicast.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com:80', name:'STAGING_PUBLIC_BASE_URL', description:'3Scale staging public domain')
       //string (defaultValue: 'backend-api', name:'DEV_PROJECT', description:'API Base System Name')
       string (defaultValue: 'threescale-toolbox', name:'TOOLBOX_PROJECT', description:'3Scale Toolbox OCP Project Name')
       //string (defaultValue: 'hello_service', name:'API_BASE_SYSTEM_NAME', description:'API Base System Name')
@@ -94,6 +94,9 @@ pipeline{
 
           echo "Create an Application"
           service.applyApplication()
+
+          echo "Promote to production"
+          service.promoteToProduction()
         }
       }
     } // END Public Hello API to 3Scale

@@ -1,0 +1,20 @@
+---
+- name: apicast
+  version: builtin
+  configuration: {}
+  enabled: true
+- name: routing
+  version: builtin
+  configuration:
+    rules:
+    - condition:
+        combine_op: and
+        operations:
+        - value_type: plain
+          match: header
+          value: Hello*
+          op: matches
+          header_name: MY-HEADER
+      url: http://hello-service.backend-api.svc.cluster.local:8080
+      replace_path: "/hello/get"
+  enabled: true
