@@ -23,7 +23,7 @@ pipeline{
       string (defaultValue: 'user1-apicast-production.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com', name:'PUBLIC_PRODUCTION_WILDCARD_DOMAIN', description:'3Scale production public domain')
       string (defaultValue: 'user1-apicast-staging.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com', name:'PUBLIC_STAGING_WILDCARD_DOMAIN', description:'3Scale staging public domain')
       string (defaultValue: 'backend-api', name:'DEV_PROJECT', description:'API Base System Name')
-      string (defaultValue: 'threescale-toolbox', name:'TOOLBOX_PROJECT', description:'API Base System Name')
+      string (defaultValue: 'threescale-toolbox', name:'TOOLBOX_PROJECT', description:'3Scale Toolbox OCP Project Name')
       string (defaultValue: 'hello_service', name:'API_BASE_SYSTEM_NAME', description:'API Base System Name')
       string (defaultValue: 'https://github.com/rh-integration/IntegrationApp-Automation.git', name:'GIT_REPO', description:'Git source')
       string (defaultValue: 'main', name:'GIT_BRANCH', description:'Git branch in the source git')
@@ -33,7 +33,7 @@ pipeline{
       //string (defaultValue: 'quay.io/redhat/3scale-toolbox:v0.14.0', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
       string (defaultValue: 'yes', name:'DISABLE_TLS_VALIDATION', description:'Disable TLS verification')
       string (defaultValue: '3scale-toolbox', name:'SECRET_NAME', description:'3Scale Toolbox OCP Secret')
-      string (defaultValue: 'Developer', name:'DEVELOPER_ACCOUNT_ID', description:'Developer Account Id')
+      string (defaultValue: 'john', name:'DEVELOPER_ACCOUNT_ID', description:'Developer Account Id')
       string (defaultValue: 'https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/plan.yaml', name:'PLAN_YAML_FILE_PATH', description:'Application Plan YAML file')
       string (defaultValue: 'openapi-spec.json', name:'OPENAPI_FILE', description:'Open API file')
       string (defaultValue: 'IfNotPresent', name:'IMAGE_PULL_POLICY', description:'3Scale Toolbox Image Pull Strategy')
@@ -55,7 +55,7 @@ pipeline{
           def app_name= 'hello-service'
           def backend_service = app_name + '.backend-api.svc.cluster.local'
           def targetPort = '8080'
-          backend_service=  "http://"+backend_service
+          backend_service=  "http://" + backend_service + targetPort
           
           echo "Prepare 3Scale Configuration"
 
@@ -107,6 +107,59 @@ pipeline{
 
 
 
+  }
+
+  def runToolbox(args) {
+    def kubernetesJob = [
+      "apiVersion": "batch/v1",
+      "kind": "Job",
+      "metadata": [
+        "name": "toolbox"
+      ],
+      "spec": [
+        "backoffLimit": 0,
+        "activeDeadlineSeconds": 300,
+        "template": [
+          "spec": [
+            "restartPolicy": "Never",
+            "containers": [
+              [
+                "name": "job",
+                "image": "registry.redhat.io/3scale-amp2/toolbox-rhel8:1.9.0-46",
+                "imagePullPolicy": "IfNotPresent",
+                "args": [ "3scale", "version" ],
+                "env": [
+                  [ "name": "HOME", "value": "/config" ]
+                ],
+                "volumeMounts": [
+                  [ "mountPath": "/config", "name": "toolbox-config" ],
+                  [ "mountPath": "/artifacts", "name": "artifacts" ]
+                ]
+              ]
+            ],
+            "volumes": [
+              [ "name": "toolbox-config", "secret": [ "secretName": "3scale-toolbox" ] ],
+              [ "name": "artifacts", "configMap": [ "name": "openapi" ] ]
+            ]
+          ]
+        ]
+      ]
+    ]
+
+    kubernetesJob.spec.template.spec.containers[0].args = args
+
+    sh "rm -f -- job.yaml"
+    writeYaml file: "job.yaml", data: kubernetesJob
+    sh """
+    oc delete job toolbox --ignore-not-found
+    sleep 2
+    oc create -f job.yaml
+    sleep 20 # Adjust the sleep duration to your server velocity
+    """
+
+    def logs = sh(script: "oc logs -f job/toolbox", returnStdout: true)
+    echo logs
+    return logs
   }
 
 }
