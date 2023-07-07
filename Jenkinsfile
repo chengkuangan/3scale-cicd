@@ -69,6 +69,7 @@ pipeline{
                             image           : params.TOOLBOX_IMAGE_REGISTRY,
                             insecure        : params.DISABLE_TLS_VALIDATION == "yes",
                             secretName      : params.SECRET_NAME,
+                            JOB_BASE_NAME   : app_name,
                             verbose         : true],
                   service: [:],
                   applicationPlans: [
