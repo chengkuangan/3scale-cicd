@@ -35,7 +35,7 @@ pipeline{
       string (defaultValue: '3scale-toolbox', name:'SECRET_NAME', description:'Disable TLS verification')
       string (defaultValue: 'Developer', name:'DEVELOPER_ACCOUNT_ID', description:'Developer Account Id')
       string (defaultValue: 'https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/plan.yaml', name:'PLAN_YAML_FILE_PATH', description:'Developer Account Id')
-      
+      string (defaultValue: 'openapi-spec-2.0.json', name:'OPENAPI_FILE', description:'Developer Account Id')
   }
   
   stages{
@@ -57,7 +57,7 @@ pipeline{
           
           echo "Prepare 3Scale Configuration"
           service = toolbox.prepareThreescaleService(
-                  openapi: [filename: "openapi-spec.yaml"],
+                  openapi: [filename: params.OPENAPI_FILE],
                   environment: [baseSystemName                : params.API_BASE_SYSTEM_NAME,
                                 privateBaseUrl                : backend_service,
                                 privateBasePath               : "/hello",
