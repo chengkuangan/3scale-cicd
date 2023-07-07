@@ -1,64 +1,81 @@
 {
-    "openapi" : "3.0.3",
-    "info" : {
-      "title" : "hello-service API",
-      "version" : "1.0.0-SNAPSHOT"
-    },
-    "paths" : {
-      "/hello/get" : {
-        "get" : {
-          "tags" : [ "Resource" ],
-          "parameters" : [ {
-            "name" : "MY-HEADER",
-            "in" : "header",
-            "schema" : {
-              "type" : "string"
+  "openapi": "3.0.3",
+  "info": {
+    "title": "hello-service API",
+    "version": "1.0.0-SNAPSHOT"
+  },
+  "paths": {
+    "/hello/get": {
+      "get": {
+        "tags": [
+          "Resource"
+        ],
+        "parameters": [
+          {
+            "name": "MY-HEADER",
+            "in": "header",
+            "schema": {
+              "type": "string"
             }
-          } ],
-          "responses" : {
-            "200" : {
-              "description" : "OK"
-            }
+          },
+          {
+            "name": "user_key",
+            "in": "query",
+            "description": "API User Key",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "x-data-threescale-name": "user_keys"
           }
-        }
-      },
-      "/hello/get/{name}" : {
-        "get" : {
-          "tags" : [ "Resource" ],
-          "parameters" : [ {
-            "name" : "name",
-            "in" : "path",
-            "required" : true,
-            "schema" : {
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "description" : "OK"
-            }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    "components" : {
-      "securitySchemes" : {
-        "SecurityScheme" : {
-          "type" : "http",
-          "description" : "Authentication",
-          "scheme" : "basic"
+    "/hello/get/{name}": {
+      "get": {
+        "tags": [
+          "Resource"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "user_key",
+            "in": "query",
+            "description": "API User Key",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "x-data-threescale-name": "user_keys"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
         }
       }
-    },
-    "securityDefinitions" : {
-      "apikey" : {
-        "type" : "apiKey",
-        "description" : "Use a 3scale API Key",
-        "name" : "api-key",
-        "in" : "query"
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "SecurityScheme": {
+        "type": "http",
+        "description": "Authentication",
+        "scheme": "basic"
       }
-    },
-    "security" : [ {
-      "apikey" : [ ]
-    } ],
+    }
   }
+}
