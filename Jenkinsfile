@@ -1,11 +1,5 @@
 #!groovy
 
-// ------------------------------------------------------------------------------ 
-// 1. Pre-deploy HelloService
-// 2. Create Product
-// 3. 
-// ------------------------------------------------------------------------------ //
-
 library identifier: '3scale-toolbox-jenkins@master',
         retriever: modernSCM([$class: 'GitSCMSource',
                               remote: 'https://github.com/rh-integration/3scale-toolbox-jenkins.git',
@@ -22,11 +16,7 @@ pipeline{
   parameters{
       string (defaultValue: 'http://hello-production-apicast.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com:80', name:'PRODUCTION_PUBLIC_BASE_URL', description:'3Scale production public domain')
       string (defaultValue: 'http://hello-staging-apicast.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com:80', name:'STAGING_PUBLIC_BASE_URL', description:'3Scale staging public domain')
-      //string (defaultValue: 'backend-api', name:'DEV_PROJECT', description:'API Base System Name')
       string (defaultValue: 'threescale-toolbox', name:'TOOLBOX_PROJECT', description:'3Scale Toolbox OCP Project Name')
-      //string (defaultValue: 'hello_service', name:'API_BASE_SYSTEM_NAME', description:'API Base System Name')
-      //string (defaultValue: 'https://github.com/rh-integration/IntegrationApp-Automation.git', name:'GIT_REPO', description:'Git source')
-      //string (defaultValue: 'main', name:'GIT_BRANCH', description:'Git branch in the source git')
       string (defaultValue: '3scale-tenant', name:'TARGET_INSTANCE', description:'Target instance for toolbox')
       string (defaultValue: 'registry.redhat.io/3scale-amp2/toolbox-rhel8:1.9.0-46', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
       string (defaultValue: 'yes', name:'DISABLE_TLS_VALIDATION', description:'Disable TLS verification')
@@ -73,7 +63,7 @@ pipeline{
                             verbose         : false],
                   service: [:],
                   applicationPlans: [
-                          [systemName: "plan1", name: "Hello Application Plan", defaultPlan: true, costPerMonth: 100, setupFee: 10, trialPeriodDays: 5],
+                          //[systemName: "plan1", name: "Hello Application Plan", defaultPlan: true, costPerMonth: 100, setupFee: 10, trialPeriodDays: 5],
                           [artefactFile: params.PLAN_YAML_FILE_PATH],
                   ],
                   applications: [
@@ -90,9 +80,7 @@ pipeline{
           echo "Service with system_name ${service.environment.targetSystemName} created !"
 
           echo "Import Policies"
-          // 3scale policies import -f policies.yaml 3scale-tenant hello_service  
           def myCommandLine = ["3scale", "policies", "import", "-u", "https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/policies.yaml"] + service.toolbox.getGlobalToolboxOptions() + service.toolbox.destination + ["hello_service"]
-          echo "Command line: " + myCommandLine
           
           service.toolbox.runToolbox(commandLine: myCommandLine,
                 jobName: "import-policies")
