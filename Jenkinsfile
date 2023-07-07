@@ -36,7 +36,7 @@ pipeline{
       string (defaultValue: 'Developer', name:'DEVELOPER_ACCOUNT_ID', description:'Developer Account Id')
       string (defaultValue: 'https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/plan.yaml', name:'PLAN_YAML_FILE_PATH', description:'Application Plan YAML file')
       string (defaultValue: 'openapi-spec.json', name:'OPENAPI_FILE', description:'Open API file')
-      string (defaultValue: 'Always', name:'IMAGE_PULL_POLICY', description:'3Scale Toolbox Image Pull Strategy')
+      string (defaultValue: 'IfNotPresent', name:'IMAGE_PULL_POLICY', description:'3Scale Toolbox Image Pull Strategy')
       
   }
   
