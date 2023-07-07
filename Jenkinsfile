@@ -80,8 +80,7 @@ pipeline{
                             verbose         : true],
                   service: [:],
                   applicationPlans: [
-                          [systemName: "hello_simple_plan", name: "Hello Application Plan", defaultPlan: true, costPerMonth: 100, setupFee: 10, trialPeriodDays: 5],
-                          [systemName: "hello_silver_plan", name: "Hello Application Silver Plan", costPerMonth: 100, setupFee: 10, trialPeriodDays: 5],
+                          [systemName: "plan1", name: "Hello Application Plan", defaultPlan: true, costPerMonth: 100, setupFee: 10, trialPeriodDays: 5],
                           [artefactFile: params.PLAN_YAML_FILE_PATH],
                   ],
                   applications: [
