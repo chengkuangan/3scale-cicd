@@ -67,8 +67,8 @@ pipeline{
                             destination: params.TARGET_INSTANCE,
                             image           : params.TOOLBOX_IMAGE_REGISTRY,
                             insecure        : params.DISABLE_TLS_VALIDATION == "yes",
-                            secretName      : params.SECRET_NAME],
-                            verbose         : true
+                            secretName      : params.SECRET_NAME,
+                            verbose         : true],
                   service: [:],
                   applicationPlans: [
                           [systemName: "hello_simple_plan", name: "Hello Application Plan", defaultPlan: true, costPerMonth: 100, setupFee: 10, trialPeriodDays: 5],
