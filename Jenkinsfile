@@ -70,7 +70,7 @@ pipeline{
                             insecure        : params.DISABLE_TLS_VALIDATION == "yes",
                             secretName      : params.SECRET_NAME,
                             imagePullPolicy : params.IMAGE_PULL_POLICY,
-                            verbose         : true],
+                            verbose         : false],
                   service: [:],
                   applicationPlans: [
                           [systemName: "plan1", name: "Hello Application Plan", defaultPlan: true, costPerMonth: 100, setupFee: 10, trialPeriodDays: 5],
@@ -88,6 +88,11 @@ pipeline{
           echo "Import OpenAPI"
           service.importOpenAPI()
           echo "Service with system_name ${service.environment.targetSystemName} created !"
+
+          echo "Import Policies"
+          def myCommandLine = ["3scale", "policies", "import", "-f", "policies.yaml"] + globalOptions + [ "hello_service"]
+          service.toolbox.runToolbox(commandLine: myCommandLine,
+                jobName: "import-policies")
 
           echo "Create an Application Plan"
           service.applyApplicationPlans()
