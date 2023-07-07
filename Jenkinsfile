@@ -93,7 +93,7 @@ pipeline{
           // 3scale policies import -f policies.yaml 3scale-tenant hello_service  
           def myCommandLine = ["3scale", "policies", "import", "-u", "https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/policies.yaml"] + service.toolbox.getGlobalToolboxOptions() + service.toolbox.destination + ["hello_service"]
           echo "Command line: " + myCommandLine
-
+          
           service.toolbox.runToolbox(commandLine: myCommandLine,
                 jobName: "import-policies")
 
