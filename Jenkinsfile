@@ -84,7 +84,7 @@ pipeline{
                           [artefactFile: params.PLAN_YAML_FILE_PATH],
                   ],
                   applications: [
-                          [name: "hello_service", description: "This is used for test environment ", plan: "hello_simple_plan", account: params.DEVELOPER_ACCOUNT_ID]
+                          [name: app_name, description: "This is used for test environment ", plan: "plan1", account: params.DEVELOPER_ACCOUNT_ID]
 
                   ]
 
