@@ -20,13 +20,13 @@ pipeline{
     }
   }
   parameters{
-      string (defaultValue: 'http://hello-service-user1-apicast-production.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com', name:'PRODUCTION_PUBLIC_BASE_URL', description:'3Scale production public domain')
-      string (defaultValue: 'http://hello-service-user1-apicast-staging.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com', name:'STAGING_PUBLIC_BASE_URL', description:'3Scale staging public domain')
-      string (defaultValue: 'backend-api', name:'DEV_PROJECT', description:'API Base System Name')
+      string (defaultValue: 'https://hello-service-user1-apicast-production.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com:443', name:'PRODUCTION_PUBLIC_BASE_URL', description:'3Scale production public domain')
+      string (defaultValue: 'https://hello-service-user1-apicast-staging.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com:443', name:'STAGING_PUBLIC_BASE_URL', description:'3Scale staging public domain')
+      //string (defaultValue: 'backend-api', name:'DEV_PROJECT', description:'API Base System Name')
       string (defaultValue: 'threescale-toolbox', name:'TOOLBOX_PROJECT', description:'3Scale Toolbox OCP Project Name')
-      string (defaultValue: 'hello_service', name:'API_BASE_SYSTEM_NAME', description:'API Base System Name')
+      //string (defaultValue: 'hello_service', name:'API_BASE_SYSTEM_NAME', description:'API Base System Name')
       //string (defaultValue: 'https://github.com/rh-integration/IntegrationApp-Automation.git', name:'GIT_REPO', description:'Git source')
-      string (defaultValue: 'main', name:'GIT_BRANCH', description:'Git branch in the source git')
+      //string (defaultValue: 'main', name:'GIT_BRANCH', description:'Git branch in the source git')
       string (defaultValue: '3scale-tenant', name:'TARGET_INSTANCE', description:'Target instance for toolbox')
       string (defaultValue: 'registry.redhat.io/3scale-amp2/toolbox-rhel8:1.9.0-46', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
       string (defaultValue: 'yes', name:'DISABLE_TLS_VALIDATION', description:'Disable TLS verification')
@@ -49,7 +49,6 @@ pipeline{
 
       steps{
         script {
-          def envName = params.DEV_PROJECT
           def app_name= 'hello-service'
           def backend_service = app_name + '.backend-api.svc.cluster.local'
           def targetPort = '8080'
@@ -62,16 +61,13 @@ pipeline{
 
           service = toolbox.prepareThreescaleService(
                   openapi: [filename: params.OPENAPI_FILE],
-                  environment: [baseSystemName                : params.API_BASE_SYSTEM_NAME,
-                                privateBaseUrl                : backend_service,
-                                privateBasePath               : "/hello",
-                                environmentName               :  envName,
+                  environment: [privateBaseUrl                : backend_service,
                                 targetSystemName              : "hello_service",
-                                stagingPublicBaseURL          : params.PRODUCTION_PUBLIC_BASE_URL,
-                                productionPublicBaseURL       : params.STAGING_PUBLIC_BASE_URL
+                                stagingPublicBaseURL          : params.STAGING_PUBLIC_BASE_URL,
+                                productionPublicBaseURL       : params.PRODUCTION_PUBLIC_BASE_URL
                               ],
                   toolbox: [openshiftProject: params.TOOLBOX_PROJECT, 
-                            destination: params.TARGET_INSTANCE,
+                            destination     : params.TARGET_INSTANCE,
                             image           : params.TOOLBOX_IMAGE_REGISTRY,
                             insecure        : params.DISABLE_TLS_VALIDATION == "yes",
                             secretName      : params.SECRET_NAME,
