@@ -46,8 +46,8 @@ pipeline{
         script {
           def envName = params.DEV_PROJECT
           def app_name= 'hello-service'
-          def backend_service = sh(script: "oc get route ${app_name} -o jsonpath=\'{.spec.host}\' -n ${envName}", returnStdout: true)
-          def targetPort = sh(script: "oc get route ${app_name} -o jsonpath=\'{.spec.port.targetPort}\' -n ${envName}", returnStdout: true)
+          def backend_service = app_name + '.backend-api.svc.cluster.local'
+          def targetPort = '8080'
           backend_service=  "http://"+backend_service
           
           echo "Prepare 3Scale Configuration"
