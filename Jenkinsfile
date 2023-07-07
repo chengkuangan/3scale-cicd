@@ -90,7 +90,8 @@ pipeline{
           echo "Service with system_name ${service.environment.targetSystemName} created !"
 
           echo "Import Policies"
-          def myCommandLine = ["3scale", "policies", "import", "-f", "policies.yaml"] + service.toolbox.getGlobalToolboxOptions() + ["hello_service"]
+          // 3scale policies import -f policies.yaml 3scale-tenant hello_service  
+          def myCommandLine = ["3scale", "policies", "import", "-f", "policies.yaml"] + service.toolbox.getGlobalToolboxOptions() + service.toolbox.destination + ["hello_service"]
           echo "Command line: " + myCommandLine
 
           service.toolbox.runToolbox(commandLine: myCommandLine,
