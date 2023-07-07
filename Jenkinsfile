@@ -26,7 +26,7 @@ pipeline{
       string (defaultValue: 'hello_service', name:'API_BASE_SYSTEM_NAME', description:'API Base System Name')
       string (defaultValue: 'image-registry.openshift-image-registry.svc:5000', name:'IMAGE_REGISTRY', description:'open shift token')
       string (defaultValue: 'https://github.com/rh-integration/IntegrationApp-Automation.git', name:'GIT_REPO', description:'Git source')
-      string (defaultValue: 'master', name:'GIT_BRANCH', description:'Git branch in the source git')
+      string (defaultValue: 'main', name:'GIT_BRANCH', description:'Git branch in the source git')
       string (defaultValue: 'instance_a', name:'TARGET_INSTANCE', description:'Target instance for toolbox')
       string (defaultValue: 'image-registry.openshift-image-registry.svc:5000/rh-dev/toolbox:v0.12.4', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
       string (defaultValue: 'yes', name:'DISABLE_TLS_VALIDATION', description:'Disable TLS verification')
@@ -42,51 +42,54 @@ pipeline{
 
     stage('Publish Hello API to 3Scale'){
 
-      def envName = params.DEV_PROJECT
-      def app_name= 'hello-service'
-      def backend_service = sh(script: "oc get route ${app_name} -o jsonpath=\'{.spec.host}\' -n ${envName}", returnStdout: true)
-      def targetPort = sh(script: "oc get route ${app_name} -o jsonpath=\'{.spec.port.targetPort}\' -n ${envName}", returnStdout: true)
-      backend_service=  "http://"+backend_service
-      
-      echo "Prepare 3Scale Configuration"
-      service = toolbox.prepareThreescaleService(
-              openapi: [filename: "cicd-3scale/3scaletoolbox/openapi-spec.json"],
-              environment: [baseSystemName                : params.API_BASE_SYSTEM_NAME,
-                            privateBaseUrl                : backend_service,
-                            privateBasePath               : "/cicd",
-                            environmentName               :  envName,
-                            publicStagingWildcardDomain: params.PUBLIC_STAGING_WILDCARD_DOMAIN != "" ? params.PUBLIC_STAGING_WILDCARD_DOMAIN : null,
-                            publicProductionWildcardDomain: params.PUBLIC_PRODUCTION_WILDCARD_DOMAIN != "" ? params.PUBLIC_PRODUCTION_WILDCARD_DOMAIN : null
-                          ],
-              toolbox: [openshiftProject: params.DEV_PROJECT, destination: params.TARGET_INSTANCE,
-                        image           : params.TOOLBOX_IMAGE_REGISTRY,
-                        insecure        : params.DISABLE_TLS_VALIDATION == "yes",
-                        secretName      : params.SECRET_NAME],
-              service: [:],
-              applicationPlans: [
-                      [systemName: "hello_simple_plan", name: "Hello Application Plan", defaultPlan: true, costPerMonth: 100, setupFee: 10, trialPeriodDays: 5],
-                      [systemName: "hello_silver_plan", name: "Hello Application Silver Plan", costPerMonth: 100, setupFee: 10, trialPeriodDays: 5],
-                      [artefactFile: params.PLAN_YAML_FILE_PATH],
-              ],
-              applications: [
-                      [name: envName, description: "This is used for test environment ", plan: "hello_simple_plan", account: params.DEVELOPER_ACCOUNT_ID]
+      steps{
+        script {
+          def envName = params.DEV_PROJECT
+          def app_name= 'hello-service'
+          def backend_service = sh(script: "oc get route ${app_name} -o jsonpath=\'{.spec.host}\' -n ${envName}", returnStdout: true)
+          def targetPort = sh(script: "oc get route ${app_name} -o jsonpath=\'{.spec.port.targetPort}\' -n ${envName}", returnStdout: true)
+          backend_service=  "http://"+backend_service
+          
+          echo "Prepare 3Scale Configuration"
+          service = toolbox.prepareThreescaleService(
+                  openapi: [filename: "openapi-spec.json"],
+                  environment: [baseSystemName                : params.API_BASE_SYSTEM_NAME,
+                                privateBaseUrl                : backend_service,
+                                privateBasePath               : "/cicd",
+                                environmentName               :  envName,
+                                publicStagingWildcardDomain: params.PUBLIC_STAGING_WILDCARD_DOMAIN != "" ? params.PUBLIC_STAGING_WILDCARD_DOMAIN : null,
+                                publicProductionWildcardDomain: params.PUBLIC_PRODUCTION_WILDCARD_DOMAIN != "" ? params.PUBLIC_PRODUCTION_WILDCARD_DOMAIN : null
+                              ],
+                  toolbox: [openshiftProject: params.DEV_PROJECT, destination: params.TARGET_INSTANCE,
+                            image           : params.TOOLBOX_IMAGE_REGISTRY,
+                            insecure        : params.DISABLE_TLS_VALIDATION == "yes",
+                            secretName      : params.SECRET_NAME],
+                  service: [:],
+                  applicationPlans: [
+                          [systemName: "hello_simple_plan", name: "Hello Application Plan", defaultPlan: true, costPerMonth: 100, setupFee: 10, trialPeriodDays: 5],
+                          [systemName: "hello_silver_plan", name: "Hello Application Silver Plan", costPerMonth: 100, setupFee: 10, trialPeriodDays: 5],
+                          [artefactFile: params.PLAN_YAML_FILE_PATH],
+                  ],
+                  applications: [
+                          [name: envName, description: "This is used for test environment ", plan: "hello_simple_plan", account: params.DEVELOPER_ACCOUNT_ID]
 
-              ]
+                  ]
 
-      ) // END Prepare 3Scale Configuration
+          ) // END Prepare 3Scale Configuration
 
-      echo "toolbox version = " + service.toolbox.getToolboxVersion()
+          echo "toolbox version = " + service.toolbox.getToolboxVersion()
 
-      echo "Import OpenAPI"
-      service.importOpenAPI()
-      echo "Service with system_name ${service.environment.targetSystemName} created !"
+          echo "Import OpenAPI"
+          service.importOpenAPI()
+          echo "Service with system_name ${service.environment.targetSystemName} created !"
 
-      echo "Create an Application Plan"
-      service.applyApplicationPlans()
+          echo "Create an Application Plan"
+          service.applyApplicationPlans()
 
-      echo "Create an Application"
-      service.applyApplication()
-
+          echo "Create an Application"
+          service.applyApplication()
+        }
+      }
     } // END Public Hello API to 3Scale
 
 
