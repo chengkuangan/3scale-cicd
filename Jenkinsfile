@@ -14,8 +14,8 @@ pipeline{
     }
   }
   parameters{
-      string (defaultValue: 'http://hello-production-apicast.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com:80', name:'PRODUCTION_PUBLIC_BASE_URL', description:'3Scale production public domain')
-      string (defaultValue: 'http://hello-staging-apicast.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com:80', name:'STAGING_PUBLIC_BASE_URL', description:'3Scale staging public domain')
+      string (defaultValue: 'http://hello-production-apicast.apps.cluster-bt5c8.bt5c8.sandbox1023.opentlc.com:80', name:'PRODUCTION_PUBLIC_BASE_URL', description:'3Scale production public domain')
+      string (defaultValue: 'http://hello-staging-apicast.apps.cluster-bt5c8.bt5c8.sandbox1023.opentlc.com:80', name:'STAGING_PUBLIC_BASE_URL', description:'3Scale staging public domain')
       string (defaultValue: 'threescale-toolbox', name:'TOOLBOX_PROJECT', description:'3Scale Toolbox OCP Project Name')
       string (defaultValue: '3scale-tenant', name:'TARGET_INSTANCE', description:'Target instance for toolbox')
       string (defaultValue: 'registry.redhat.io/3scale-amp2/toolbox-rhel8:1.9.0-46', name:'TOOLBOX_IMAGE_REGISTRY', description:'Toolbox image registry')
@@ -25,7 +25,7 @@ pipeline{
       string (defaultValue: 'https://raw.githubusercontent.com/chengkuangan/3scale-cicd/main/plan.yaml', name:'PLAN_YAML_FILE_PATH', description:'Application Plan YAML file')
       string (defaultValue: 'openapi-spec.json', name:'OPENAPI_FILE', description:'Open API file')
       string (defaultValue: 'IfNotPresent', name:'IMAGE_PULL_POLICY', description:'3Scale Toolbox Image Pull Strategy')
-      string (defaultValue: 'http://hello-service.backend-api.svc.cluster.local:8080', name:'BACKEND_API_PRIVATE_URL', description:'3Scale Toolbox Image Pull Strategy')
+      string (defaultValue: 'http://hello-service.backend-api.svc.cluster.local:8080', name:'BACKEND_API_PRIVATE_URL', description:'Backend API private URL')
       
   }
   

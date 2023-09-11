@@ -9,7 +9,7 @@ spec:
   deploymentEnvironment: staging
   configurationLoadMode: lazy
   exposedHost:
-    host: "hello-staging-apicast.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com"
+    host: "hello-staging-apicast.apps.cluster-bt5c8.bt5c8.sandbox1023.opentlc.com"
 
 
 ---
@@ -25,4 +25,4 @@ spec:
   deploymentEnvironment: production
   configurationLoadMode: lazy
   exposedHost:
-    host: "hello-production-apicast.apps.cluster-hk42t.hk42t.sandbox2512.opentlc.com"
+    host: "hello-production-apicast.apps.cluster-bt5c8.bt5c8.sandbox1023.opentlc.com"
