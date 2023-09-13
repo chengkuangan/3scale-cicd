@@ -1,6 +1,10 @@
+## Sample Apps
+
+Refers [HelloService](/HelloService/README.md) for how to deploy this.
+
 ## CI/CD Demo Using Jenkins
 
-> Note: This demo is using the [HelloService](/HelloService/) as the backend API
+> Note: This demo is using the [HelloService](/HelloService/README.md) as the backend API
 
 **Deploy Jenkins**
 
